@@ -18,13 +18,14 @@ connection.connect( function (err) {
 });
 
 
-function updateData(product, quantity, message = "") {
+function updateData(product, quantity, productSale, message = "") {
     console.log("Updating product data...\n");
     var query = connection.query(
         "UPDATE products SET ? WHERE ?",
         [
             {
-                stock_quantity: quantity
+                stock_quantity: quantity,
+                product_sales: productSale
             },
             {
                 product_name: product
@@ -73,7 +74,7 @@ function readData(showProducts = false) {
 
 
 function showInventory(data) {
-    console.log("\n               *********CURRENT INVENTORY********\n");
+    console.log("\n               ********* CURRENT INVENTORY ********\n");
     data.forEach(element =>{
         var qty = element.stock_quantity;
         if (parseInt(qty) === 0) qty = "Out of Stock";
@@ -108,8 +109,10 @@ function promptPurchase() {
             message: "Enter quantity to purchase:",
             validate: function (value) {
                 if (isNaN(value) === false) {
+                    console.log("number entered");
                     return true;
                 }
+                console.log("NaN");
                 return false;
             }
         }
@@ -135,11 +138,18 @@ function promptPurchase() {
         // update the SQL database to reflect the remaining quantity.
             
         // Once the update goes through, show the customer the total cost of their purchase.
-            cartTotal += parseFloat((chosenItem.price * quantity).toFixed(2));
-            var message = `Your new total cost is $${cartTotal}.`;
-            updateData(answers.item, chosenItem.stock_quantity - quantity, message); 
-        }
-       
+
+            // update product_sales value with each sale.
+            var productCost = parseFloat((chosenItem.price * quantity).toFixed(2));
+            var productSales;
+            if(isNaN(parseFloat(chosenItem.product_sales)) )
+                productSales = productCost;
+            else
+                productSales = parseFloat(chosenItem.product_sales) + productCost;
+            cartTotal += productCost;
+            var message = `Your new total cost is $${cartTotal.toFixed(2)}.`;
+            updateData(answers.item, chosenItem.stock_quantity - quantity, productSales, message); 
+        }       
 
 
     });
