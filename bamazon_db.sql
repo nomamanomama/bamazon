@@ -69,6 +69,10 @@ INSERT INTO departments (
 -- SELECT department_id, departments.department_name, over_head_costs,ROUND(SUM(product_sales),2) AS total_sales, ROUND(COALESCE(SUM(product_sales), 0) - over_head_costs, 2) AS total_profit
 --  FROM departments LEFT JOIN products ON (departments.department_name = products.department_name) group by departments.department_name;
  
-select * from departments;
+-- select * from departments;
+--  USE bamazon;
+-- delete from departments where department_name = "Shoes/Accessories";  
+-- delete from products where department_name = "Shoes/Accessories";
+--  select * from products order by department_name;
 
- select * from products order by department_name;
+ 

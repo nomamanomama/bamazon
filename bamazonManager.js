@@ -1,4 +1,4 @@
-// * Create a new Node application called`bamazonManager.js`.Running this application will:
+// `bamazonManager.js`.Running this application will:
 
 // * List a set of menu options:
 
@@ -34,7 +34,7 @@ connection.connect(function (err) {
 
 
 function createData(name, dept, price, qty) {
-    console.log("Inserting a new product...\n");
+    //console.log("Inserting a new product...\n");
     var query = connection.query('INSERT into products SET ?',
         {
             product_name: name,
@@ -49,11 +49,11 @@ function createData(name, dept, price, qty) {
         }
     );
     // logs the actual query being run
-    console.log(query.sql);
+    //console.log(query.sql);
 }
 
 function updateData(product, quantity) {
-    console.log("Updating product data...\n");
+    //console.log("Updating product data...\n");
     var query = connection.query(
         "UPDATE products SET ? WHERE ?",
         [
@@ -72,7 +72,7 @@ function updateData(product, quantity) {
     );
 
     // logs the actual query being run
-    console.log(query.sql);
+    //console.log(query.sql);
 }
 
 function deleteData(product_name) {
@@ -198,47 +198,56 @@ function addInventory() {
 }
 
 function addProduct() {
-    //console.log("prompting purchase");
-    inquirer.prompt([
-        {
-            name: "item",
-            type: "input",
-            message: "Enter new product name:"
-        },
-        {
-            name: "dept",
-            type: "list",
-            choices: ["Electronics", "Hardware & Tools", "Home Bed & Bath", "Patio and Garden"],
-            message: "Select department:"
-        },
-        {
-            type: "input",
-            name: "quantity",
-            message: "Enter quantity:",
-            validate: function (value) {
-                if (isNaN(value) === false) {
-                    return true;
-                }
-                return false;
-            }
-        },
-        {
-            type: "input",
-            name: "price",
-            message: "Enter price:",
-            validate: function (value) {
-                if (isNaN(value) === false) {
-                    return true;
-                }
-                return false;
-            }
-        },
-
-    ])
-        .then(function (answers, err) {
-            // add new item to the SQL database .
-            createData(answers.item, answers.dept, answers.price, answers.quantity);
+    //console.log("prompting purchase"); 
+    var choiceArray = [];
+    connection.query("Select department_name from departments",function (err, res) {
+        if (err) throw err;
+       
+        res.forEach(element => {
+            choiceArray.push(element.department_name);
         });
+    
+        inquirer.prompt([
+            {
+                name: "item",
+                type: "input",
+                message: "Enter new product name:"
+            },
+            {
+                name: "dept",
+                type: "list",
+                choices: choiceArray,
+                message: "Select department:"
+            },
+            {
+                type: "input",
+                name: "quantity",
+                message: "Enter quantity:",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                type: "input",
+                name: "price",
+                message: "Enter price:",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+
+        ])
+            .then(function (answers, err) {
+                // add new item to the SQL database .
+                createData(answers.item, answers.dept, answers.price, answers.quantity);
+            });
+    });
 }
 
 

@@ -1,3 +1,6 @@
+//bamazoncustomer.js 
+//display products for sale then prompt customer to select a product for purchase
+
 var inquirer = require ('inquirer');
 var mysql = require ('mysql');
 
@@ -57,7 +60,7 @@ function updateData(product, quantity, productSale, message = "") {
     );
 
     // logs the actual query being run
-    console.log(query.sql);
+    //console.log(query.sql);
 }
 
 function readData(showProducts = false) {
@@ -109,10 +112,10 @@ function promptPurchase() {
             message: "Enter quantity to purchase:",
             validate: function (value) {
                 if (isNaN(value) === false) {
-                    console.log("number entered");
+                    //console.log("number entered");
                     return true;
                 }
-                console.log("NaN");
+                console.log("Please enter a valid quantity.");
                 return false;
             }
         }
