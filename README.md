@@ -19,7 +19,7 @@ Supervisors can run the CLI for managers with node bamazonsupervisor.js to:
     * Add a new department
 
 #Demo
-![bamazon - Demo]('./images/bamazon.gif')
+![bamazon - Demo]('https://nomamanomama.github.io/bamazon/images/bamazon.gif')
 
 #Technology Used
 node.js
